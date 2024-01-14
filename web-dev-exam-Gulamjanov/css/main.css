@@ -66,6 +66,48 @@ label {
   max-width: 400px !important;
   white-space: pre-wrap;
 }
+
+.moto {
+	color: #9b755e;
+}
+
+.exp {
+	width: 80px;
+}
+
+.exp_ttl {
+	width: 500px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.title{
+	font-size: 25px;
+}
+
+.subtitle {
+	font-size: 16px;
+}
+
+.contacts{
+	font-size: 14px;
+}
+
+.copy {
+	font-size: 12px;
+	text-align: center;
+}
+
+.navbar{
+	background-color: #9b755e;
+}
+
+.coninfo {
+	display: flex;
+	justify-content: center;
+	align-items: center	;
+}
 .guides {
 	display: none;
 }
@@ -113,46 +155,4 @@ label {
 		font-size: 10px !important;
 		padding: 5px 10px 5px 10px !important;
 	}
-}
-
-.moto {
-	color: #9b755e;
-}
-
-.exp {
-	width: 80px;
-}
-
-.exp_ttl {
-	width: 500px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
-
-.title{
-	font-size: 25px;
-}
-
-.subtitle {
-	font-size: 16px;
-}
-
-.contacts{
-	font-size: 14px;
-}
-
-.copy {
-	font-size: 12px;
-	text-align: center;
-}
-
-.navbar{
-	background-color: #9b755e;
-}
-
-.coninfo {
-	display: flex;
-	justify-content: center;
-	align-items: center	;
 }
