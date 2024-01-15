@@ -11,7 +11,7 @@ h6 {
 	height: 200px !important;
 	border-width: 0px !important;
 }
-.card-body {
+.cardBody {
 	position: absolute;
 	bottom: 5px;
 	left: 5px;
@@ -21,7 +21,7 @@ h6 {
 .icon {
 	margin-bottom: 10px;
 }
-.officeLink {
+.PrivateOfficeLink {
 	position: absolute;
 	text-decoration: none;
 	right: 0;
@@ -32,7 +32,7 @@ h6 {
 	border-radius: 10px;
 }
 
-.officeLink:hover{
+.PrivateOfficeLink:hover{
  color: #9b755e;
  background-color: black;
  padding: 10px;
@@ -117,13 +117,13 @@ label {
 .active {
 	display: block !important;
 }
-.modal-body {
+.modalBody {
 	font-size: 15px !important;
 }
-.form-control {
+.controlForm {
 	margin-bottom: 15px !important;
 }
-.form-select {
+.controlForm {
 	margin-bottom: 15px !important;
 }
 .footer {
@@ -132,7 +132,7 @@ label {
 	padding: 40px 0 0 40px;
 }
 @media (min-width: 300px) and (max-width: 670px) {
-	.officeLink {
+	.PrivateOfficeLink {
 		position: relative;
 		top: 14px;
 	}
