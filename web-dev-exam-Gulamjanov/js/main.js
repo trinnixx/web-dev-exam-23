@@ -12,6 +12,8 @@ let routesData = [];
 let tempBody = 0;
 let selectedRouteId = 0;
 let selectedGuideId = 0;
+let selectedGuide = '';
+let selectedRoute = '';
 const quantity = document.getElementById("quantity");
 const check = document.getElementById("check");
 const check2 = document.getElementById("check2");
@@ -21,7 +23,7 @@ const date = document.getElementById("date");
 const totalCost = document.getElementById("totalCost");
 const sendButton = document.getElementById('send');
 
-function sendRequest (method, url, body = null) {
+function sendRequest(method, url, body = null) {
     return new Promise((resolve, reject) => {
         xhr.open(method, url)
         xhr.responseType = 'json'
@@ -29,7 +31,7 @@ function sendRequest (method, url, body = null) {
         xhr.onload = () => {
             if (xhr.status >= 400) {
                 reject(xhr.response)
-            } else {  
+            } else {
                 resolve(xhr.response)
             }
         }
@@ -85,18 +87,18 @@ function createPaginationBtns(totalPages) {
     const ul = document.createElement('ul');
     ul.classList.add('pagination');
     ul.className += ' justify-content-center';
-  
+
     for (let i = 1; i <= totalPages; i++) {
         const li = document.createElement('li');
         li.classList.add('page-item');
         const button = document.createElement('button');
         button.textContent = i;
         button.classList.add('page-link');
-        button.onclick = function() {
+        button.onclick = function () {
             currentPage = i;
             routesTable(currentPage);
         };
-        li.appendChild(button); 
+        li.appendChild(button);
         ul.appendChild(li);
     }
     paginationContainer.appendChild(ul);
@@ -119,17 +121,17 @@ function prevPageBtn() {
 //отображение таблицы и кнопок пагинации
 function displayRoutes() {
     sendRequest('GET', apiEndpoints.routes)
-    .then(data => {
-        routesData = data;
-        const totalPages = Math.ceil(routesData.length / rowsPerPage);
-        const next = document.getElementById('next');
-        const prev = document.getElementById('prev');
+        .then(data => {
+            routesData = data;
+            const totalPages = Math.ceil(routesData.length / rowsPerPage);
+            const next = document.getElementById('next');
+            const prev = document.getElementById('prev');
 
-        routesTable(currentPage);
-        createPaginationBtns(totalPages);
-        next.setAttribute('onclick', 'nextPageBtn()');
-        prev.setAttribute('onclick', 'prevPageBtn()');
-    }) 
+            routesTable(currentPage);
+            createPaginationBtns(totalPages);
+            next.setAttribute('onclick', 'nextPageBtn()');
+            prev.setAttribute('onclick', 'prevPageBtn()');
+        })
 }
 
 displayRoutes();
@@ -166,33 +168,33 @@ function selectRoute(event, name, id) {
 
     //заполнение таблицы гидов
     sendRequest('GET', modifiedGuidesApi)
-    .then(data => {
-        const guidesTable = document.getElementById('guidesTable');
+        .then(data => {
+            const guidesTable = document.getElementById('guidesTable');
 
-        while (guidesTable.rows.length > 1) {
-            guidesTable.deleteRow(1);
-        }   
-        
-        data.forEach(guide => {
-            const row = guidesTable.insertRow(-1);
-            const cell_photo = row.insertCell(0);
-            const cell_name = row.insertCell(1);
-            const cell_lang = row.insertCell(2);
-            const cell_exp = row.insertCell(3);
-            const cell_price = row.insertCell(4);
-            const cell_btn = row.insertCell(5);
+            while (guidesTable.rows.length > 1) {
+                guidesTable.deleteRow(1);
+            }
 
-            cell_photo.innerHTML = `
+            data.forEach(guide => {
+                const row = guidesTable.insertRow(-1);
+                const cell_photo = row.insertCell(0);
+                const cell_name = row.insertCell(1);
+                const cell_lang = row.insertCell(2);
+                const cell_exp = row.insertCell(3);
+                const cell_price = row.insertCell(4);
+                const cell_btn = row.insertCell(5);
+
+                cell_photo.innerHTML = `
               <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
                 <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/>
               </svg>`;
-            cell_name.innerHTML = guide.name;
-            cell_lang.innerHTML = guide.language;
-            cell_exp.innerHTML = guide.workExperience;
-            cell_price.innerHTML = `${guide.pricePerHour} руб.`;
-            cell_btn.innerHTML = `<button class="btn btn-light" id="selectButton" onclick="selectGuide(event, '${name}', '${guide.name}', '${id}', '${guide.id}', '${guide.pricePerHour}')">Выбрать</button>`;
-        });
-    })
+                cell_name.innerHTML = guide.name;
+                cell_lang.innerHTML = guide.language;
+                cell_exp.innerHTML = guide.workExperience;
+                cell_price.innerHTML = `${guide.pricePerHour} руб.`;
+                cell_btn.innerHTML = `<button class="btn btn-light" id="selectButton" onclick="selectGuide(event, '${name}', '${guide.name}', '${id}', '${guide.id}', '${guide.pricePerHour}')">Выбрать</button>`;
+            });
+        })
 }
 
 //выбор гида
@@ -232,6 +234,8 @@ function selectGuide(event, routeName, guideName, routeId, guideId, price) {
     storeData();
     selectedRouteId = parseInt(routeId);
     selectedGuideId = parseInt(guideId);
+    selectedGuide = guideName;
+    selectedRoute = routeName;
 }
 
 //расчет стоимости заявки
@@ -290,6 +294,8 @@ function calculatePrice(guideCost) {
     const object = {
         guide_id: 0,
         route_id: 0,
+        guideName: '',
+        routeName: '',
         date: date_value,
         time: time_value,
         duration: duration_value,
@@ -297,14 +303,14 @@ function calculatePrice(guideCost) {
         price: price_value,
         optionFirst: optionFirst_value,
         optionSecond: optionFirst_value
-    }; 
-  return object;
+    };
+    return object;
 }
 
 function storeData() {
     body = calculatePrice(tempBody);
-    body.optionFirst = check.checked;
-    body.optionSecond = check2.checked;
+    body.optionFirst = check.checked ? 1 : 0;
+    body.optionSecond = check2.checked ? 1 : 0;
 }
 
 //отправка заявки на сервер
@@ -312,18 +318,21 @@ function sendOrder(event) {
     event.preventDefault();
     body.guide_id = selectedGuideId;
     body.route_id = selectedRouteId;
+    body.guideName = selectedGuide;
+    body.routeName = selectedRoute;
     sendRequest('POST', apiEndpoints.orders, body)
-    .then(response => {
-        console.log('Order placed successfully:', response);
-        const alert = document.getElementById('alert');
-        alert.classList.add('active');
-        setTimeout(() => {
-            alert.classList.remove('active');
-        }, 5000);
-    })
-    .catch(error => {
-        console.error('Error placing order:', error);
-    });
+        .then(response => {
+            console.log('Order placed successfully:', response);
+            const alert = document.getElementById('alert');
+            alert.classList.add('active');
+            alert.innerText = 'Ваша заявка успешно отправлена!';
+            setTimeout(() => {
+                alert.classList.remove('active');
+            }, 5000);
+        })
+        .catch(error => {
+            console.error('Error placing order:', error);
+        });
     console.log(body);
 }
 
@@ -333,12 +342,12 @@ function dateFormat() {
     var dd = today.getDate() + 1;
     var mm = today.getMonth() + 1;
     var yyyy = today.getFullYear();
-    if(dd < 10){
-      dd='0' + dd
-    } 
-    if(mm < 10){
-      mm='0' + mm
-    } 
+    if (dd < 10) {
+        dd = '0' + dd
+    }
+    if (mm < 10) {
+        mm = '0' + mm
+    }
     today = yyyy + '-' + mm + '-' + dd;
     document.getElementById("date").setAttribute("min", today);
     document.getElementById("date").setAttribute("value", today);
@@ -351,8 +360,5 @@ date.addEventListener('input', storeData);
 time.addEventListener('input', storeData);
 check.addEventListener('change', storeData);
 check2.addEventListener('change', storeData);
-duration.addEventListener('change', storeData);    
+duration.addEventListener('change', storeData);
 sendButton.addEventListener('submit', sendOrder);
-
-
-
